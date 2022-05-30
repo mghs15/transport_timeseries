@@ -262,7 +262,7 @@ const overlayStyle = {
 
 <div id='menutop'>
   <div id="note">
-    <span>試験中</span>
+    <span id="note_contents"></span>
   </div>
 
 <div id='menu'>
@@ -456,6 +456,8 @@ const refleshAll = () => {
   
   //レイヤへのFilterを変更（sub含めて全て）
   changeAllStyleFilters();
+  
+  document.getElementById("note_contents").innerText = `${inputValues["slider_01"]}年に存在した交通`;
   
 }
 
