@@ -100,6 +100,14 @@ table.popup-table {
 <script>
 const inputSetting = [
   {
+    "id": "text_01",
+    "type": "text",
+    "title": "文字フィルタ",
+    "size": 20,
+    "default": "",
+    "newline": true
+  },
+  {
     "id": "slider_01",
     "type": "slider",
     "title": "年",
@@ -334,6 +342,21 @@ const createSelector = s => {
 
 }
 
+const createTextInput = s => {
+  
+  const formArea = document.getElementById("question");
+  
+  const input = document.createElement("input");
+  input.setAttribute("type", "text");
+  input.setAttribute("id", s.id);
+  input.setAttribute("name", s.id);
+  input.setAttribute("size", s.size);
+  input.setAttribute("value", s.default);
+  
+  input.addEventListener("change", () => {refleshAll();} );
+  formArea.appendChild(input);  
+}
+
 inputSetting.forEach( s => {
   //表示エリア取得
   const formArea = document.getElementById("question");
@@ -353,6 +376,9 @@ inputSetting.forEach( s => {
       break;
     case "select":
       createSelector(s);
+      break;
+    case "text":
+      createTextInput(s);
       break;
   }
   
@@ -501,6 +527,21 @@ const makeFilter = () => {
       [">=", ["to-number", ["get", "N06_003"]], +inputValues["slider_01"] ]
     ]
   ];
+  
+  if(inputValues["text_01"]){
+    filter = [
+      "all",
+      filter,
+      ["any",
+        ["in", inputValues["text_01"], ["get", "N06_007"] ],
+        ["in", inputValues["text_01"], ["get", "N05_002"] ],
+        ["in", inputValues["text_01"], ["get", "N05_003"] ]
+      ]
+    ]
+  }
+  
+  console.log(filter);
+  
   return filter;
   
 }
