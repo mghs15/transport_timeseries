@@ -518,7 +518,10 @@ const makeFilter = () => {
     "any", 
     ["all",
       ["has", "N05_001"],
-      ["<=", ["to-number", ["get", "N05_005b"]], +inputValues["slider_01"] ],
+      ["any",
+        ["==", ["to-number", ["get", "N05_005b"]], 999 ],
+        ["<=", ["to-number", ["get", "N05_005b"]], +inputValues["slider_01"] ]
+      ],
       [">=", ["to-number", ["get", "N05_005e"]], +inputValues["slider_01"] ]
     ],
     ["all",
