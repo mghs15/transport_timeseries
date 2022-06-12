@@ -143,18 +143,29 @@ const overlayStyle = {
       tiles: ['https://mghs15.github.io/transport_timeseries/xyz/expressway-ts/{z}/{x}/{y}.pbf'],
       minzoom: 6,
       maxzoom: 8,
-      attribution: "<a href='https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N06-v1_2.html' target='_blank'>国土数値情報（高速道路時系列）</a>"
+      attribution: "国土数値情報（高速道路時系列）"
     },
     'my-source-2': {
       "metadata":{
         "keyName": "N05_006", //選択リストに利用するKEYとなる属性値名,
-        "title": "鉄道"
+        "title": "鉄道路線"
       },
       type: 'vector',
       tiles: ['https://mghs15.github.io/transport_timeseries/xyz/railway-ts/{z}/{x}/{y}.pbf'],
       minzoom: 6,
       maxzoom: 8,
-      attribution: "<a href='https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N05-v1_3.html' target='_blank'>国土数値情報（鉄道時系列）</a>"
+      attribution: "国土数値情報（鉄道時系列）"
+    },
+    'my-source-3': {
+      "metadata":{
+        "keyName": "N05_011", //選択リストに利用するKEYとなる属性値名,
+        "title": "鉄道駅"
+      },
+      type: 'vector',
+      tiles: ['https://mghs15.github.io/transport_timeseries/xyz/station-ts/{z}/{x}/{y}.pbf'],
+      minzoom: 6,
+      maxzoom: 8,
+      attribution: "国土数値情報（鉄道時系列）"
     }
   },
   "layers": [
@@ -257,6 +268,67 @@ const overlayStyle = {
       },
       'source-layer': 'railway'
     },
+    
+    {
+      'metadata': {
+        'isMainLayer': true
+      },
+      'id': 'my-main-layer-3',
+      'type': 'circle',
+      'source': 'my-source-3',
+      'minzoom': 6,
+      'maxzoom': 22,
+      'layout': {
+        'visibility': 'visible'
+      },
+      'paint': {
+        'circle-color': ['rgb', 100, 100, 255],
+        'circle-radius': 4
+      },
+      'source-layer': 'railway'
+    },
+    {
+      'metadata': {
+        'isSelectedLayer': true
+      },
+      'id': 'my-sub1-layer-3',
+      'type': 'circle',
+      'source': 'my-source-3',
+      'minzoom': 6,
+      'maxzoom': 22,
+      'layout': {
+        'visibility': 'visible'
+      },
+      'paint': {
+        'circle-color': ['rgb', 255, 0, 0],
+        'circle-width': 4
+      },
+      'source-layer': 'railway'
+    },
+    {
+      'id': 'my-sub2-layer-3',
+      'type': 'symbol',
+      'source': 'my-source-3',
+      'minzoom': 11,
+      'maxzoom': 22,
+      'layout': {
+        'text-field': [
+          "concat",
+          ["get", "N05_011"]
+        ],
+        'text-size': 12,
+        'text-font': ["NotoSansCJKjp-Regular"],
+        'text-allow-overlap': false,
+        'symbol-placement': "point",
+        'visibility': 'visible'
+      },
+      'paint': {
+        'text-color': ['rgb', 100, 100, 255],
+        'text-halo-color': ['rgba', 255,255,255,1],
+        'text-halo-width': 2
+      },
+      'source-layer': 'railway'
+    },
   ]
 };
 
@@ -316,7 +388,6 @@ const createSlider = s => {
   slider.setAttribute("min", s.min);
   slider.setAttribute("max", s.max);
   slider.setAttribute("value", s.default);
-  
   slider.addEventListener("change", () => {refleshAll();} );
   formArea.appendChild(slider);  
 }
@@ -356,6 +427,7 @@ const createTextInput = s => {
   input.addEventListener("change", () => {refleshAll();} );
   formArea.appendChild(input);  
 }
+
 
 inputSetting.forEach( s => {
   //表示エリア取得
@@ -485,6 +557,7 @@ const refleshAll = () => {
   
   document.getElementById("note_contents").innerText = `${inputValues["slider_01"]}年に存在した交通`;
   
+  
 }
 
 const makeFilter = () => {
@@ -514,7 +587,7 @@ const makeFilter = () => {
   ];*/
   
   //○年時点で存在した路線
-  const filter = [
+  let filter = [
     "any", 
     ["all",
       ["has", "N05_001"],
@@ -538,7 +611,8 @@ const makeFilter = () => {
       ["any",
         ["in", inputValues["text_01"], ["get", "N06_007"] ],
         ["in", inputValues["text_01"], ["get", "N05_002"] ],
-        ["in", inputValues["text_01"], ["get", "N05_003"] ]
+        ["in", inputValues["text_01"], ["get", "N05_003"] ],
+        ["in", inputValues["text_01"], ["get", "N05_011"] ]
       ]
     ]
   }
