@@ -184,7 +184,7 @@ const overlayStyle = {
         'visibility': 'visible'
       },
       'paint': {
-        'line-color': ['rgb', 100, 205, 100],
+        'line-color': ['rgb', 0, 161, 0],
         'line-width': 2
       },
       'source-layer': 'expressway'
@@ -203,6 +203,7 @@ const overlayStyle = {
       },
       'paint': {
         'line-color': ['rgb', 255, 0, 0],
+        'line-opacity': 0.5,
         'line-width': 4
       },
       'source-layer': 'expressway'
@@ -241,6 +242,7 @@ const overlayStyle = {
       },
       'paint': {
         'line-color': ['rgb', 255, 0, 0],
+        'line-opacity': 0.5,
         'line-width': 4
       },
       'source-layer': 'railway'
@@ -296,24 +298,6 @@ const overlayStyle = {
         'isSelectedLayer': true
       },
       'id': 'my-sub1-layer-3',
-      'type': 'circle',
-      'source': 'my-source-3',
-      'minzoom': 6,
-      'maxzoom': 22,
-      'layout': {
-        'visibility': 'visible'
-      },
-      'paint': {
-        'circle-color': ['rgb', 255, 0, 0],
-        'circle-width': 4
-      },
-      'source-layer': 'railway'
-    },
-    {
-      'metadata': {
-        'isSelectedLayer': true
-      },
-      'id': 'my-sub1-layer-3',
       'type': 'symbol',
       'source': 'my-source-3',
       'minzoom': 6,
@@ -325,8 +309,9 @@ const overlayStyle = {
         ],
         'text-size': 12,
         'text-font': ["NotoSansCJKjp-Regular"],
-        'text-allow-overlap': true,
+        'text-allow-overlap': false,
         'symbol-placement': "point",
+        'text-variable-anchor': ['right', 'bottom', 'left', 'top'],
         'visibility': 'visible'
       },
       'paint': {
@@ -351,6 +336,7 @@ const overlayStyle = {
         'text-font': ["NotoSansCJKjp-Regular"],
         'text-allow-overlap': false,
         'symbol-placement': "point",
+        'text-variable-anchor': ['right', 'bottom', 'left', 'top'],
         'visibility': 'visible'
       },
       'paint': {
@@ -512,7 +498,7 @@ for( source in overlayStyle.sources){
 const map = new mapboxgl.Map({
   container: 'map', // container id
   hash: true, //add #position on URL
-  style: './base.json', // stylesheet location
+  style: './basic-tts.json', // stylesheet location
   center: [139.78148, 35.768793], // starting position [lng, lat]
   zoom: 9, // starting zoom
   minZoom: 6,
@@ -735,6 +721,14 @@ map.on('load', () => {
     
   });
   
+  map.addLayer({
+    'id': 'overlay-highlight',
+    'type': 'background',
+    'paint': {
+      'background-opacity':0 
+    }
+  });
+  
   refleshAll();
   
 });
@@ -829,7 +823,7 @@ const refleshSelectedFeatures = (sourceId) => {
         layer.id = selectedLayerId;
         layer.filter = filter;
         console.log(selectedLayerId);
-        map.addLayer(layer, 'overlay');
+        map.addLayer(layer, 'overlay-highlight');
       }
     });
     
