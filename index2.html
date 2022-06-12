@@ -158,7 +158,7 @@ const overlayStyle = {
     },
     'my-source-3': {
       "metadata":{
-        "keyName": "N05_011", //選択リストに利用するKEYとなる属性値名,
+        "keyName": "N05_006", //選択リストに利用するKEYとなる属性値名,
         "title": "鉄道駅"
       },
       type: 'vector',
@@ -169,6 +169,8 @@ const overlayStyle = {
     }
   },
   "layers": [
+  
+    //高速道路
     {
       'metadata': {
         'isMainLayer': true
@@ -206,6 +208,7 @@ const overlayStyle = {
       'source-layer': 'expressway'
     },
     
+    //鉄道路線
     {
       'metadata': {
         'isMainLayer': true
@@ -269,6 +272,7 @@ const overlayStyle = {
       'source-layer': 'railway'
     },
     
+    //鉄道駅
     {
       'metadata': {
         'isMainLayer': true
@@ -302,6 +306,33 @@ const overlayStyle = {
       'paint': {
         'circle-color': ['rgb', 255, 0, 0],
         'circle-width': 4
+      },
+      'source-layer': 'railway'
+    },
+    {
+      'metadata': {
+        'isSelectedLayer': true
+      },
+      'id': 'my-sub1-layer-3',
+      'type': 'symbol',
+      'source': 'my-source-3',
+      'minzoom': 6,
+      'maxzoom': 22,
+      'layout': {
+        'text-field': [
+          "concat",
+          ["get", "N05_011"]
+        ],
+        'text-size': 12,
+        'text-font': ["NotoSansCJKjp-Regular"],
+        'text-allow-overlap': true,
+        'symbol-placement': "point",
+        'visibility': 'visible'
+      },
+      'paint': {
+        'text-color': ['rgba', 255,255,255,1],
+        'text-halo-color': ['rgb', 255, 0, 0],
+        'text-halo-width': 4
       },
       'source-layer': 'railway'
     },
