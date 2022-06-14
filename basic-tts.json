@@ -731,26 +731,6 @@
 
 
 
-{
-  "metadata":{"layer-id":"layer-902","title":"単線","path":"鉄道-通常-新幹線","added":1},
-  "type":"line","source":"gsibv-vectortile-source-1-4-16","source-layer":"railway","minzoom":8,"maxzoom":14,
-  "filter":["all",
-    ["==","ftCode",8201],["all",["has","rtCode10"],["==","rtCode10","1"]]
-  ],
-  "paint":{"line-color":"rgba(0,0,255,1)","line-opacity":{
-      "stops":[
-        [8,0.25],
-        [14,0]
-      ]
-    },"line-width":5,"line-blur":1},
-  "layout":{"line-cap":"butt","visibility":"visible"},
-  "id":"railway-normal-shinkansehighlight"
-},
-
-
-
-
-
     {
       "source":"gsibv-vectortile-source-1-4-16",
       "minzoom":13,
