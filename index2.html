@@ -168,10 +168,104 @@ const overlayStyle = {
       minzoom: 6,
       maxzoom: 8,
       attribution: "国土数値情報（鉄道時系列）"
+    },
+    'my-source-4': {
+      "metadata":{
+        "keyName": "N08_019", //選択リストに利用するKEYとなる属性値名,
+        "title": "空港"
+      },
+      type: 'vector',
+      tiles: ['http://localhost:8000/docs/ts/xyz/airport-ts/{z}/{x}/{y}.pbf'],
+      minzoom: 6,
+      maxzoom: 8,
+      attribution: "国土数値情報（空港時系列）"
     }
   },
   "layers": [
-  
+    
+    //空港
+    {
+      'metadata': {
+        'isMainLayer': true
+      },
+      'id': 'mysub3-layer-4',
+      'type': 'fill',
+      'source': 'my-source-4',
+      'minzoom': 8,
+      'maxzoom': 22,
+      'layout': {
+        'visibility': 'visible'
+      },
+      'paint': {
+        'fill-color': ['rgb', 255, 255, 200],
+        'fill-opacity': 0.5,
+        'fill-outline-color': ['rgb', 255, 150, 100]
+      },
+      'source-layer': 'airport-area'
+    },
+    {
+      'metadata': {
+        'isMainLayer': true
+      },
+      'id': 'my-main-layer-4',
+      'type': 'circle',
+      'source': 'my-source-4',
+      'minzoom': 6,
+      'maxzoom': 10,
+      'layout': {
+        'visibility': 'visible'
+      },
+      'paint': {
+        'circle-color': ['rgb', 255, 150, 100],
+        'circle-radius': 8
+      },
+      'source-layer': 'airport-point'
+    },
+    {
+      'metadata': {
+        'isSelectedLayer': true
+      },
+      'id': 'mysub3-layer-4',
+      'type': 'fill',
+      'source': 'my-source-4',
+      'minzoom': 8,
+      'maxzoom': 22,
+      'layout': {
+        'visibility': 'visible'
+      },
+      'paint': {
+        'fill-color': ['rgb', 255, 200, 200],
+        'fill-opacity': 0.5,
+        'fill-outline-color': ['rgb', 255, 00, 00]
+      },
+      'source-layer': 'airport-area'
+    },
+    {
+      'id': 'my-sub2-layer-4',
+      'type': 'symbol',
+      'source': 'my-source-4',
+      'minzoom': 10,
+      'maxzoom': 22,
+      'layout': {
+        'text-field': [
+          "concat",
+          ["get", "N08_019"]
+        ],
+        'text-size': 12,
+        'text-font': ["NotoSansCJKjp-Regular"],
+        'text-allow-overlap': true,
+        'symbol-placement': "point",
+        'text-variable-anchor': ['right', 'bottom', 'left', 'top'],
+        'visibility': 'visible'
+      },
+      'paint': {
+        'text-color': ['rgb', 255, 150, 100],
+        'text-halo-color': ['rgba', 255,255,255,1],
+        'text-halo-width': 2
+      },
+      'source-layer': 'airport-point'
+    },
+    
     //高速道路
     {
       'metadata': {
@@ -226,7 +320,7 @@ const overlayStyle = {
       },
       'paint': {
         'line-color': ['rgb', 100, 100, 255],
-        'line-width': 2
+        'line-width': 3
       },
       'source-layer': 'railway'
     },
@@ -348,6 +442,7 @@ const overlayStyle = {
       },
       'source-layer': 'railway'
     },
+    
   ]
 };
 
@@ -500,7 +595,7 @@ for( source in overlayStyle.sources){
 const map = new mapboxgl.Map({
   container: 'map', // container id
   hash: true, //add #position on URL
-  style: './basic-tts.json', // stylesheet location
+  style: './style.json', // stylesheet location
   center: [139.78148, 35.768793], // starting position [lng, lat]
   zoom: 9, // starting zoom
   minZoom: 6,
@@ -625,6 +720,16 @@ const makeFilter = () => {
       ["has", "N06_001"],
       ["<=", ["to-number", ["get", "N06_001"]], +inputValues["slider_01"] ],
       [">=", ["to-number", ["get", "N06_003"]], +inputValues["slider_01"] ]
+    ],
+    ["all",
+      ["has", "N08_014"],
+      ["<=", ["to-number", ["get", "N08_014"]], +inputValues["slider_01"] ],
+      [">=", ["to-number", ["get", "N08_015"]], +inputValues["slider_01"] ]
+    ],
+    ["all",
+      ["has", "N08_022"],
+      ["<=", ["to-number", ["get", "N08_022"]], +inputValues["slider_01"] ],
+      [">=", ["to-number", ["get", "N08_023"]], +inputValues["slider_01"] ]
     ]
   ];
   
@@ -636,7 +741,8 @@ const makeFilter = () => {
         ["in", inputValues["text_01"], ["get", "N06_007"] ],
         ["in", inputValues["text_01"], ["get", "N05_002"] ],
         ["in", inputValues["text_01"], ["get", "N05_003"] ],
-        ["in", inputValues["text_01"], ["get", "N05_011"] ]
+        ["in", inputValues["text_01"], ["get", "N05_011"] ],
+        ["in", inputValues["text_01"], ["get", "N08_019"] ]
       ]
     ]
   }
