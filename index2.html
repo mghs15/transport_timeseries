@@ -879,13 +879,18 @@ const popup = new mapboxgl.Popup({
 
 
 const openPopupFunc = (e) => {
-
+  
   //初期化
   popup.remove();
   
   //レンダリングされた地物を取得
   const targetLayers = overlayInfo.overlayMainLayerIdList;
-  const features = map.queryRenderedFeatures(e.point, {layers: targetLayers});
+  const sv = 5;
+  const bb = [
+    [e.point.x - sv, e.point.y - sv],
+    [e.point.x + sv, e.point.y + sv]
+  ];
+  const features = map.queryRenderedFeatures(bb, {layers: targetLayers});
   
   if(!features.length) {
     return;
@@ -960,7 +965,12 @@ const orderListFunc = (e) => {
 
   //レンダリングされた地物を取得
   const targetLayers = overlayInfo.overlayMainLayerIdList;
-  const features = map.queryRenderedFeatures(e.point, {layers: targetLayers});
+  const sv = 5;
+  const bb = [
+    [e.point.x - sv, e.point.y - sv],
+    [e.point.x + sv, e.point.y + sv]
+  ];
+  const features = map.queryRenderedFeatures(bb, {layers: targetLayers});
   
   if(!features.length) {
     return;
