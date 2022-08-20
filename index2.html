@@ -859,15 +859,21 @@ map.on('click', (e) => {
 
 //ポップアップ表示 -------------------------------
 
-const makePopupHtml = (prop) => {
+const makePopupHtml = (feature) => {
   
-  let htmlString = ""; //ポップアップ
+  const prop = feature.properties
+  
+  const fTitle = overlayStyle.sources[feature.source].metadata.title;
+  
+  let htmlString = `<div>${fTitle}</div>`; //ポップアップ
   let featureProperties = "";
   for(name in prop){
-    featureProperties = featureProperties + "<tr><td style='vertical-align:top; color:#555555;'>" + name + "</td>"
+    featureProperties = featureProperties + "<tr>"
+                      + "<td style='vertical-align:top; color:#555555;'>" + name + "</td>"
                       + "<td style='color:#000000;'>" + prop[name] + "</td></tr>";
   }
-  htmlString = htmlString + "<table class='popup-table'>" + featureProperties + "</table>";
+  
+  htmlString += "<table class='popup-table'>" + featureProperties + "</table>";
   
   return htmlString;
   
@@ -885,7 +891,7 @@ const openPopupFunc = (e) => {
   
   //レンダリングされた地物を取得
   const targetLayers = overlayInfo.overlayMainLayerIdList;
-  const sv = 5;
+  const sv = 3;
   const bb = [
     [e.point.x - sv, e.point.y - sv],
     [e.point.x + sv, e.point.y + sv]
@@ -899,7 +905,7 @@ const openPopupFunc = (e) => {
   //ポップアップ表示処理
   let htmlString = "";
   features.forEach( feature => {
-    htmlString = htmlString + makePopupHtml(feature.properties);
+    htmlString += makePopupHtml(feature);
     console.log(feature.properties);
   });
   
@@ -965,7 +971,7 @@ const orderListFunc = (e) => {
 
   //レンダリングされた地物を取得
   const targetLayers = overlayInfo.overlayMainLayerIdList;
-  const sv = 5;
+  const sv = 3;
   const bb = [
     [e.point.x - sv, e.point.y - sv],
     [e.point.x + sv, e.point.y + sv]
@@ -992,7 +998,6 @@ const orderListFunc = (e) => {
       }else{
         delete myList[sourceId][id];
         refleshSelectedFeatures(sourceId);
-        if(popup) popup.remove();
       }
     }
   });
@@ -1031,7 +1036,7 @@ const openOverlayPage = () =>{
   
   listEle.innerHTML = makeListHtml(myList);
   
-  pageEle.style.display = "";
+  pageEle.style.display = "block";
   console.log(myList);
  
 }
